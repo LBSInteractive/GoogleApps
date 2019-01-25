@@ -1,0 +1,27 @@
+{
+  "name": "NetDav Sniffer",
+  "version": "1.0",
+  "description": "Extensión Sniffer",
+  "icons": {
+    "16": "images/NetLink-16.png",
+    "32": "images/NetLink-32.png",
+    "48": "images/NetLink-48.png",
+    "128": "images/NetLink-128.png"
+  },
+  "permissions": ["webRequest","*://localhost/","storage", "declarativeContent", "activeTab"],
+  "options_page": "options.html",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/NetLink-16.png",
+      "32": "images/NetLink-32.png",
+      "48": "images/NetLink-48.png",
+      "128": "images/NetLink-128.png"
+    }
+  },
+  "manifest_version": 2
+}
