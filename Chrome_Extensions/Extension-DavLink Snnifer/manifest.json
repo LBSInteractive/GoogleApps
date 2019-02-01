@@ -1,0 +1,27 @@
+{
+  "name": "DavLink Sniffer",
+  "version": "1.5",
+  "description": "Beta Test",
+  "icons": {
+    "16": "app/site_media/logo/NetLink-16.png",
+    "32": "app/site_media/logo/NetLink-32.png",
+    "48": "app/site_media/logo/NetLink-48.png",
+    "128": "app/site_media/logo/NetLink-128.png"
+  },
+  "permissions": ["storage","declarativeContent","activeTab","cookies","webRequestBlocking","webRequest","*://webappletlab.davivienda.loc/*","*://webappletdes.davivienda.loc/*","*://168.170.1.218/*","*://168.170.2.225/*","*://localhost/*"],
+  "options_page": "config/options/options.html",
+  "background": {
+    "page": "config/background/background.html",
+    "persistent": true
+  },
+  "page_action": {
+    "default_popup": "app/html/home/home.html",
+    "default_icon": {
+      "16": "app/site_media/logo/NetLink-16.png",
+      "32": "app/site_media/logo/NetLink-32.png",
+      "48": "app/site_media/logo/NetLink-48.png",
+      "128": "app/site_media/logo/NetLink-128.png"
+    }
+  },
+  "manifest_version": 2
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    /* TIANES */
+    html {
+      overflow-y: scroll
+    }
+
+    body {
+      margin: 0;
+      font-weight: 200;
+      -webkit-text-size-adjust: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-text-size-adjust: none;
+      -moz-font-smoothing: antialiased
+    }
+
+    article,
+    aside,
+    footer,
+    header,
+    hgroup,
+    nav,
+    section {
+      display: block
+    }
+
+    dd,
+    dl,
+    dt,
+    form,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    input,
+    ol,
+    p,
+    select,
+    textarea,
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      font-size: inherit
+    }
+
+    img {
+      border: none;
+      -ms-interpolation-mode: bicubic
+    }
+
+    a {
+      text-decoration: none
+    }
+
+    input[type=checkbox] {
+      display: inline-block;
+      vertical-align: middle;
+      margin: -2px 0 0 0
+    }
+  </style>
+
+  <!-- APP STYLES -->
+  <link rel="stylesheet" type="text/css" href="/app/css/build.min.css" />
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" type="text/css" href="/node_modules/font-awesome/css/font-awesome.css" />
+
+  <script src="/node_modules/angular/angular.js"></script>
+  <script src="/app/js/home/home.js"></script>
+</head>
+
+<body ng-app="davLinkHomeApp" ng-controller="davLinkHomeCtrl" style="height:{{height}}px;width:{{width}}px;outline: none;">
+  <gs ng-click="execute.restOn();program.getRest();" col="x-3|sm-6" ng-show="viewSize">
+    <div gui="classic-kpi" title="Rest enviados" bg-color="peter-river">
+      <section>
+        <p>{{restSize}}</p>
+        <h1>Servicios</h1>
+      </section>
+      <footer>
+        Cargar
+      </footer>
+    </div>
+  </gs>
+
+  <gs-row ng-show="viewTab">
+    <gs>
+      <box>
+        <gs-row ng-show="viewTab">
+          <gs col="x-12">
+            <table gui="table:table-bordered:table-zebra:table-fixed">
+              <thead>
+                <tr>
+                  <th align="center">Metodo</th>
+                  <th align="center">Tipo</th>
+                  <th align="center">Servicio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="rsT in restList">
+                  <th align="left">{{rsT.method}}</th>
+                  <th align="left">xHR</th>
+                  <th align="left">{{ rsT.url.split('/')[(rsT.url.split('/').length - 1)]}}</th> 
+                </tr>
+              </tbody>
+            </table>
+          </gs>
+        </gs-row>
+
+        <gs-row>
+          <gs>
+            <input type="button" gui="form-button" ng-click="program.volver();" bg-color="alizarin" value="Volver">
+          </gs>
+        </gs-row>
+      </box>
+    </gs>
+
+  </gs-row>
+
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "DavLink Snnifer Dependencias",
+  "version": "1.0",
+  "dependencies": {
+    "angular": "^1.7.6",
+    "font-awesome": "^4.7.0"
+  }
+}
