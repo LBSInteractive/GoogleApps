@@ -41,6 +41,8 @@
      * - webappletlab.davivienda.loc - Laboratorio
      * - 168.170.1.218 - Desarrollo
      * - 168.170.2.225 - Laboratorio
+     * - 168.170.2.25  - Siebel Des
+     * - 168.170.1.233 - Siebel Lab
      *
      * types [String]
      * - xmlhttprequest - XHR
