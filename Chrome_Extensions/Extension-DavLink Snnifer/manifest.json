@@ -8,7 +8,7 @@
     "48": "app/site_media/logo/NetLink-48.png",
     "128": "app/site_media/logo/NetLink-128.png"
   },
-  "permissions": ["storage","declarativeContent","activeTab","cookies","webRequestBlocking","webRequest","*://webappletlab.davivienda.loc/*","*://webappletdes.davivienda.loc/*","*://168.170.1.218/*","*://168.170.2.225/*","*://localhost/*"],
+  "permissions": ["storage","declarativeContent","activeTab","cookies","webRequestBlocking","webRequest","*://168.170.2.25/*","*://168.170.1.218/*","*://168.170.2.225/*","*://webappletdes.davivienda.loc/*","*://webappletlab.davivienda.loc/*","*://localhost/*"],
   "options_page": "config/options/options.html",
   "background": {
     "page": "config/background/background.html",

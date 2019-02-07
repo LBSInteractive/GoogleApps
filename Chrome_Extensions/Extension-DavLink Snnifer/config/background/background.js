@@ -1,124 +1,281 @@
-'use strict';
+    /**
+     * Modo estricto
+     * @type {String}
+     */
+    'use strict';
 
 
-var app = angular.module('davLinkBackgroundApp', []);
+    /* ------------------------------------------------------------------------------------------
+     | Variables
+     -------------------------------------------------------------------------------------------- */
 
-app.controller('davLinkBackgroundCtrl', function($scope, $rootScope) {
+    /**
+     * Historial Rest desde Background
+     * @type {Array}
+     */
+    var restStorage = [];
 
-});
+    /**
+     * Galleta
+     * @type {String}
+     */
+    var cookie = '';
 
-/*************************************************Variables*/
-var restStorage = [];
-var cookies = '';
-var restSize = 0;
-const networkFilters = {
-  urls: [
-    "*://localhost/*"
-  ],
-  types: [
-    "xmlhttprequest"
-  ]
-};
+    /**
+     * restSize Cantidad en Rest Generados
+     * @type {Number}
+     */
+    var restLength = 0;
 
-/**********************************************************/
+    /**
+     * Version de extension
+     * @type {String}
+     */
+    var version = '0.0';
 
-/**
- * Arranque de instalación
- * @param  {obj} destails Retorna versión previa ext
- */
-chrome.runtime.onInstalled.addListener(function(destails) {
+    /**
+     * Filtros
+     *
+     * urls [String]
+     * - webappletdes.davivienda.loc - Desarrollo
+     * - webappletlab.davivienda.loc - Laboratorio
+     * - 168.170.1.218 - Desarrollo
+     * - 168.170.2.225 - Laboratorio
+     *
+     * types [String]
+     * - xmlhttprequest - XHR
+     *
+     * @type {Object}
+     */
+    const networkFilters = {
+        urls: [
+            "*://168.170.2.25/*","*://168.170.1.233/*","*://168.170.1.218/*", "*://168.170.2.225/*", "*://webappletdes.davivienda.loc/*", "*://webappletlab.davivienda.loc/*", "*://localhost/*",
+        ],
+        types: [
+            "xmlhttprequest"
+        ]
+    };
 
-  chrome.cookies.getAll({
-    name: 'io'
-  }, function(callback) {
-    if (callback) {
-      cookies = callback[0].value;
-    } else {
-      console.log('Error Obteniendo [cookies]');
+
+    /* ------------------------------------------------------------------------------------------
+     | Funciones
+     -------------------------------------------------------------------------------------------- */
+
+    function getVersion(callbackOnInstalled) {
+        /**
+         * Obtener version
+         */
+        if (callbackOnInstalled.previousVersion) {
+
+            version = callbackOnInstalled.previousVersion;
+            return true;
+
+        } else {
+
+            return false;
+
+        }
     }
-  });
 
-  /**
-   * Variables Locales (Bind)
-   * @type {obj}
-   */
-  chrome.storage.local.set({
-    version: destails.previousVersion,
-    restStorage: restStorage,
-    cookies: cookies,
-    restSize: restSize
-  }, function() {
-    console.log('Storage Complete')
-  });
+    function setStorage(obj) {
+        /**
+         * Guardar datos sincronizados
+         */
+        chrome.storage.sync.set(obj, function() {
 
-  /**
-   * Reglas para activacion de extension
-   * @return {[type]} [description]
-   */
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    chrome.declarativeContent.onPageChanged.addRules([{
-      conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: {
-          urlMatches: '(https|http)://(localhost|127\.0\.0\.1|webappletdes\.davivienda\.loc|webappletlab\.davivienda\.loc|168\.170\.1\.218|168\.170\.2\.225)'
-        },
-      })],
-      actions: [new chrome.declarativeContent.ShowPageAction()]
-    }], function(details) {
+            console.log('/** Storage Complete **/');
 
-      /**
-       * En el callback podemos evidenciar el correcto cargue de reglas
-       * @type {[type]}
-       */
-      let log = details.length == 0 ? true : false;
-      // Informar si tenemos problemas al cargar la extension
-      if (log) {
-        console.log('Error agregando reglas');
-      }
-    });
-  });
+        });
+    }
 
-  /**
-   * Listener onBeforeRequest
-   * @type {obj}
-   */
-  chrome.webRequest.onBeforeRequest.addListener((details) => {
 
-    chrome.storage.local.set({
-      restSize: restStorage.length
-    });
+    function addRules() {
+        /**
+         * Agregar reglas de activacion en extension
+         */
+        chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
 
-    // Filter service API and getCombos
-    if (details && details.url) {
+            chrome.declarativeContent.onPageChanged.addRules([{
+                conditions: [new chrome.declarativeContent.PageStateMatcher({
+                    pageUrl: {
+                        urlMatches: '(https|http)://(webappletdes\.davivienda\.loc|webappletlab\.davivienda\.loc|168\.170\.1\.218|168\.170\.2\.225|168\.170\.2\.25|168\.170\.1\.233|localhost)'
+                    },
+                })],
+                actions: [new chrome.declarativeContent.ShowPageAction()]
+            }], function(callBackDeclarativeContentenOnPageChaneged) {
 
-      if (details.url.split("//")[1]) {
-        let urlRest = details.url.split("//")[1].split("/")[1] || null;
+                if (callBackDeclarativeContentenOnPageChaneged.length == 0) {
+                    console.log('/** Error Agregando Reglas **/');
+                }
 
-        if (urlRest == "api") {
-
-          if (details.requestBody) {
-            restStorage.push({
-              method: details.method,
-              requestBody: JSON.parse(decodeURIComponent(String.fromCharCode.apply(null,
-                new Uint8Array(details.requestBody.raw[0].bytes)))) || '',
-              type: 'xhr',
-              url: details.url
             });
-          }
+
+        });
+    }
+
+    function runSniffer() {
+
+        /**
+         * Listener onBeforeRequest
+         */
+        chrome.webRequest.onBeforeRequest.addListener((callBackWebRequestOnBeforeRequest) => {
+
+            // Filtrar tipos Api y GetCombos
+            if (callBackWebRequestOnBeforeRequest && callBackWebRequestOnBeforeRequest.url) {
+
+                // Eliminamos el esquema tipo Http, Https o algun otro
+                if (callBackWebRequestOnBeforeRequest.url.split("//")[1]) {
+
+                    // Arrancamos a separar de derecha a izquierda para evitar el AccessController
+                    let tempSizeRestUrl = callBackWebRequestOnBeforeRequest.url.split("//")[1].split("/").length || -1;
+                    var urlRest = null;
+                    if (tempSizeRestUrl != -1) {
+                        // Separamos todos los esquemas obteniendo solo el segmento luego del esquema Http, Https o otros
+                        urlRest = callBackWebRequestOnBeforeRequest.url.split("//")[1].split("/")[tempSizeRestUrl-3] || null;
+                    }
+
+                    // Solo dejamos pasar tipos 'api'
+                    if (urlRest == "api") {
+
+                        if (callBackWebRequestOnBeforeRequest.method == "GET") {
+
+                            let parseGetter = '';
+
+                            if (callBackWebRequestOnBeforeRequest.url) {
+
+                                parseGetter = callBackWebRequestOnBeforeRequest.url.split("?")[1];
+
+                                // Push en arreglo
+                                restStorage.push({
+                                    method: callBackWebRequestOnBeforeRequest.method,
+                                    requestBody: parseGetter || '',
+                                    type: 'XHR',
+                                    url: callBackWebRequestOnBeforeRequest.url,
+                                    nameService: (callBackWebRequestOnBeforeRequest.url.split("//")[1].split("/")[tempSizeRestUrl-2].split("?")[0]) + " / " + (callBackWebRequestOnBeforeRequest.url.split("//")[1].split("/")[tempSizeRestUrl-1].split("?")[0]),
+                                    time: new Date(callBackWebRequestOnBeforeRequest.timeStamp)
+                                });
+
+                                restLength = restStorage.length;
+
+                                setStorage({
+                                    restLength: restLength,
+                                    restStorage: restStorage
+                                });
+
+                            } else {
+
+                                console.log("/** Error Obteniendo URL del servicio **/");
+
+                            }
+
+                        } else if (callBackWebRequestOnBeforeRequest.method == "POST") {
+
+                            let parseJson = '';
+                            // Verificamos que tenga un RequestBody en su XHR
+                            if (callBackWebRequestOnBeforeRequest.requestBody) {
+
+                                if (restStorage.length == 10) {
+                                    restStorage = [];
+                                }
+
+                                let tokenParse = false;
+                                try {
+                                    JSON.parse(decodeURIComponent(String.fromCharCode.apply(null,
+                                        new Uint8Array(callBackWebRequestOnBeforeRequest.requestBody.raw[0].bytes))));
+                                } catch (e) {
+                                    tokenParse = true;
+                                    parseJson = decodeURIComponent(String.fromCharCode.apply(null,
+                                        new Uint8Array(callBackWebRequestOnBeforeRequest.requestBody.raw[0].bytes)));
+                                }
+
+                                if (!tokenParse) {
+                                    parseJson = JSON.parse(decodeURIComponent(String.fromCharCode.apply(null,
+                                        new Uint8Array(callBackWebRequestOnBeforeRequest.requestBody.raw[0].bytes))));
+                                }
+
+
+                                // Push en arreglo
+                                restStorage.push({
+                                    method: callBackWebRequestOnBeforeRequest.method,
+                                    requestBody: parseJson || '',
+                                    type: 'XHR',
+                                    url: callBackWebRequestOnBeforeRequest.url,
+                                    nameService: (callBackWebRequestOnBeforeRequest.url.split("//")[1].split("/")[tempSizeRestUrl-2]) + " / " + (callBackWebRequestOnBeforeRequest.url.split("//")[1].split("/")[tempSizeRestUrl-1]),
+                                    time: new Date(callBackWebRequestOnBeforeRequest.timeStamp)
+                                });
+
+                                restLength = restStorage.length;
+
+                                setStorage({
+                                    restLength: restLength,
+                                    restStorage: restStorage
+                                });
+
+                            } else {
+                                console.log('/** Error en el RequestBody [requestBody] para el Servicio [' + callBackWebRequestOnBeforeRequest.url.split("//")[1].split("/")[2] + '] **/');
+                            }
+
+                        } else {
+
+                            console.log("/** Error identificando metodo XHR **/");
+
+                        }
+
+                    }
+
+                } else {
+
+                    console.log('/** Error en el esquema ["*//*"] **/');
+
+                }
+
+            } else {
+
+                console.log('/** Error validando URL del Rest**/');
+
+            }
+
+            let format = JSON.stringify(restStorage);
+            chrome.storage.local.set({
+                restStorage: format
+            });
+
+        }, networkFilters, ["requestBody", "blocking"]);
+    }
+
+    /* ------------------------------------------------------------------------------------------
+     | Listener
+     -------------------------------------------------------------------------------------------- */
+
+    /**
+     * Init (Se Ejecuta al instalar la extension)
+     * @param  {obj} destails Informacion de version y actualizacion
+     */
+    chrome.runtime.onInstalled.addListener(function(callbackOnInstalled) {
+
+
+        /**
+         * @param  {function} getVersion Si (true) - carga version, si (false) - carga version por defecto
+         */
+        if (getVersion(callbackOnInstalled)) {
+
+            setStorage({
+                version: version || '',
+                restStorage: restStorage,
+                cookie: cookie,
+                restLength: restLength
+            });
+
+            addRules();
+
+            /** Inicio Sniffer **/
+            runSniffer();
+
+        } else {
+
+            console.log('/** Error obteniendo version **/');
+
         }
 
-      } else {
-        console.log('Error en el esquema HTTP://');
-      }
 
-    } else {
-      console.log('Error validando URL del servicio');
-    }
-
-    let format = JSON.stringify(restStorage);
-    chrome.storage.local.set({
-      restStorage: format
     });
-
-  }, networkFilters, ["requestBody", "blocking"]);
-
-});

@@ -1,126 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="davLinkHomeApp">
 
 <head>
-  <style>
-    /* TIANES */
-    html {
-      overflow-y: scroll
-    }
+    <!-- APP STYLES -->
+    <link rel="stylesheet" type="text/css" href="/app/css/tianesStyle.css" />
+    <link rel="stylesheet" type="text/css" href="/app/css/steveStyle.css" />
+    <link rel="stylesheet" type="text/css" href="/app/css/build.min.css" />
 
-    body {
-      margin: 0;
-      font-weight: 200;
-      -webkit-text-size-adjust: none;
-      -webkit-font-smoothing: antialiased;
-      -moz-text-size-adjust: none;
-      -moz-font-smoothing: antialiased
-    }
+    <!-- FontAwesome -->
+    <link rel="stylesheet" type="text/css" href="/node_modules/font-awesome/css/font-awesome.css" />
 
-    article,
-    aside,
-    footer,
-    header,
-    hgroup,
-    nav,
-    section {
-      display: block
-    }
-
-    dd,
-    dl,
-    dt,
-    form,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    input,
-    ol,
-    p,
-    select,
-    textarea,
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-      font-size: inherit
-    }
-
-    img {
-      border: none;
-      -ms-interpolation-mode: bicubic
-    }
-
-    a {
-      text-decoration: none
-    }
-
-    input[type=checkbox] {
-      display: inline-block;
-      vertical-align: middle;
-      margin: -2px 0 0 0
-    }
-  </style>
-
-  <!-- APP STYLES -->
-  <link rel="stylesheet" type="text/css" href="/app/css/build.min.css" />
-
-  <!-- FontAwesome -->
-  <link rel="stylesheet" type="text/css" href="/node_modules/font-awesome/css/font-awesome.css" />
-
-  <script src="/node_modules/angular/angular.js"></script>
-  <script src="/app/js/home/home.js"></script>
+    <script src="/node_modules/angular/angular.js"></script>
+    <script src="/app/js/home/home.js"></script>
 </head>
 
-<body ng-app="davLinkHomeApp" ng-controller="davLinkHomeCtrl" style="height:{{height}}px;width:{{width}}px;outline: none;">
-  <gs ng-click="execute.restOn();program.getRest();" col="x-3|sm-6" ng-show="viewSize">
-    <div gui="classic-kpi" title="Rest enviados" bg-color="peter-river">
-      <section>
-        <p>{{restSize}}</p>
-        <h1>Servicios</h1>
-      </section>
-      <footer>
-        Cargar
-      </footer>
+<body ng-controller="davLinkHomeCtrl" style="height:{{$CONFIG.height}}px;width:{{$CONFIG.width}}px;outline: none;-webkit-transition: width 80ms; /* Safari */">
+    <div ng-show="$CONFIG.viewInit">
+        <gs ng-click="$execute.windowRestList();$execute.getRest();" col="x-3">
+            <div gui="classic-kpi" title="Servicios atrapados por el Sniffer" bg-color="asbestos">
+                <section>
+                    <p>{{$view.restLength}}</p>
+                    <h1>Enviados</h1>
+                </section>
+                <footer>
+                    <h1>Request</h1>
+                </footer>
+            </div>
+        </gs>
+
+        <gs ng-click="execute.restOn();program.getRest();" col="x-3">
+            <div gui="classic-kpi" title="Respuestas de los servicios atrapados" bg-color="emerald">
+                <section>
+                    <p>0</p>
+                    <h1>Recibidos</h1>
+                </section>
+                <footer>
+                    <h1>Response</h1>
+                </footer>
+            </div>
+        </gs>
+
+        <gs col="x-3">
+            <div gui="classic-kpi" title="Modificacion de servicios" bg-color="midnight-blue">
+                <section>
+                    <p>--</p>
+                    <h1>Modificados</h1>
+                </section>
+                <footer>
+                    <h1>Modificar Request</h1>
+                </footer>
+            </div>
+        </gs>
     </div>
-  </gs>
 
-  <gs-row ng-show="viewTab">
-    <gs>
-      <box>
-        <gs-row ng-show="viewTab">
-          <gs col="x-12">
-            <table gui="table:table-bordered:table-zebra:table-fixed">
-              <thead>
-                <tr>
-                  <th align="center">Metodo</th>
-                  <th align="center">Tipo</th>
-                  <th align="center">Servicio</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="rsT in restList">
-                  <th align="left">{{rsT.method}}</th>
-                  <th align="left">xHR</th>
-                  <th align="left">{{ rsT.url.split('/')[(rsT.url.split('/').length - 1)]}}</th> 
-                </tr>
-              </tbody>
-            </table>
-          </gs>
-        </gs-row>
+    <gs-row ng-show="$CONFIG.viewTabRest">
+        <gs>
+            <box>
+                <gs-row>
+                    <gs col="x-12">
+                        <div ng-show="$list.restList.length != 0">
+                            <table gui="table:table-bordered:table-fixed">
+                                <thead>
+                                    <tr>
+                                        <th width="65" align="center">Metodo</th>
+                                        <th width="60" align="center">Tipo</th>
+                                        <th align="center">Servicio</th>
+                                        <th width="135" align="center">Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="repeatRest in $list.restList">
+                                        <th width="65" ng-click="$execute.windowJsonRest(repeatRest);" align="center">{{repeatRest.method}}</th>
+                                        <th width="60" ng-click="$execute.windowJsonRest(repeatRest);" align="center">xHR</th>
+                                        <th ng-click="$execute.windowJsonRest(repeatRest);" align="center">{{repeatRest.nameService | uppercase}}</th>
+                                        <th width="135" ng-click="$execute.windowJsonRest(repeatRest);" align="center">{{repeatRest.time | date: 'medium'}}</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-show="$list.restList.length == 0">
+                            <table gui="table:table-bordered:table-zebra:table-fixed">
+                                <thead>
+                                    <tr>
+                                        <th align="center">
+                                            <div class="loading">
+                                                Cargando</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th align="center">
+                                            <div style="width:30px;height:30px" class="loader">
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </gs>
+                    <gs>
+                        <input type="button" gui="form-button" ng-click="$execute.windowInit();" bg-color="alizarin" value="Volver">
+                    </gs>
+                </gs-row>
+            </box>
+        </gs>
+    </gs-row>
 
-        <gs-row>
-          <gs>
-            <input type="button" gui="form-button" ng-click="program.volver();" bg-color="alizarin" value="Volver">
-          </gs>
-        </gs-row>
-      </box>
-    </gs>
-
-  </gs-row>
+    <gs-row ng-show="$CONFIG.viewJsonRest">
+        <gs>
+            <box>
+                <gs-row>
+                    <gs>
+                        <header>
+                            <h3>JSON</h3>
+                        </header>
+                    </gs>
+                    <gs>
+                        <label gui="label">
+                            <textarea name="name" id="dataJsonRest" ng-value="$temp.dataJsonRest" rows="8" cols="95"></textarea>
+                        </label>
+                    </gs>
+                    <gs col="x-6">
+                        <input type="button" gui="form-button" ng-click="$execute.windowInit();$execute.windowRestList();" bg-color="alizarin" value="Volver">
+                    </gs>
+                    <gs col="x-6">
+                        <input type="button" gui="form-button" ng-click="$execute.copyJsonRestList();" bg-color="alizarin" value="{{$state.dataJsonRest}}">
+                    </gs>
+                </gs-row>
+            </box>
+        </gs>
+    </gs-row>
 
 </body>
 
