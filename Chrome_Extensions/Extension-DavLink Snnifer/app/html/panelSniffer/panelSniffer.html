@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="davLinkPanelSniffer">
+
+<head>
+    <!-- APP STYLES -->
+    <link rel="stylesheet" type="text/css" href="/app/css/tianesStyle.css" />
+    <link rel="stylesheet" type="text/css" href="/app/css/steveStyle.css" />
+    <link rel="stylesheet" type="text/css" href="/app/css/build.min.css" />
+    <meta charset="utf-8">
+    <script src="/node_modules/angular/angular.js"></script>
+    <script src="/app/js/panelSniffer/panelSniffer.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" type="text/css" href="/node_modules/font-awesome/css/font-awesome.css" />
+</head>
+
+<body ng-controller="davLinkPanelSnifferCtrl">
+    <gs-row>
+        <gs>
+            <header id="header" style="height: 15px">
+
+                <div class="header-aside">
+
+                    <button gui="button" float="right">
+                        <label for="asideSwitch">
+                            <i class="fa fa-navicon fa-lg"></i>
+                        </label>
+                    </button>
+
+                </div>
+
+                <div class="header-user">
+
+                    <button ng-mouseover="$CONFIG.hover.hoverReset = 'hoverReset'" float="right" gui="button"><i style="padding-top: 4.2px;" class="fa fa-power-off" ng-class=""></i> Reiniciar</button>
+
+                </div>
+
+                <div>
+                    <i class="fa fa-magnet"></i>
+                </div>
+
+            </header>
+        </gs>
+        <gs>
+
+        </gs>
+    </gs-row>
+</body>
+
+</html>

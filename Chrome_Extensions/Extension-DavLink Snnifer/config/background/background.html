@@ -1,8 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="davLinkBackgroundApp">
 
 <head>
-  <script src="/config/background/background.js"></script>
+    <meta charset="UTF-8    ">
+    <!-- APP STYLES -->
+    <link rel="stylesheet" type="text/css" href="/app/css/tianesStyle.css" />
+    <link rel="stylesheet" type="text/css" href="/app/css/steveStyle.css" />
+    <link rel="stylesheet" type="text/css" href="/app/css/build.min.css" />
+
+    <script src="/node_modules/angular/angular.js"></script>
+    <script src="./background.js"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" type="text/css" href="/node_modules/font-awesome/css/font-awesome.css" />
 </head>
+
+<body ng-controller="davLinkBackgroundCtrl">
+    <gs-row>
+        <gs>
+            <hgroup gui="hgroup">
+                <div>
+                    <i class="fa fa-th-list" color="asbestos"></i>
+                </div>
+                <div>
+                    <h1>Configuracion del Sniffer</h1>
+                </div>
+            </hgroup>
+        </gs>
+    </gs-row>
+
+    <gs-row>
+        <gs col="x-3">
+        </gs>
+        <gs col="x-6">
+            <box>
+                <table gui="table:table-bordered:table-narrow">
+                    <caption>SERVICIO DE ENVÍO (REST)</caption>
+                    <div style="z-index: 1;position: fixed;left: 1095px;top: 103px;" class="fa fa-paper-plane">
+                    </div>
+                    <thead>
+                        <tr>
+                            <th>Servicio</th>
+                            <th>Estado</th>
+                            <th colspan="1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="250" text-align="center">REST DE SALIDA</td>
+                            <td width="250" text-align="center">{{$state.onBeforeRequest == true ? 'Encendido' : 'Reiniciando'}}</td>
+                            <td><button style="background:{{$CONFIG.colorOnBeforeRequest}}" ng-click="$function.reiniciarListener();" gui="button"><i class="{{$state.onBeforeRequest == true ? 'fa fa-check' : 'fa fa-times'}}" color="{{$state.onBeforeRequest == true ? 'green-sea' : 'pomegranate'}}"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td width="250" text-align="center">REGLAS DE NAVEGADOR</td>
+                            <td width="250" text-align="center">{{$state.rulsNav == true ? 'Encendido' : 'Reiniciando'}}</td>
+                            <td><button style="background:{{$CONFIG.colorRulsNav}}" ng-click="$function.reiniciarRulsNav();" gui="button"><i class="{{$state.rulsNav == true ? 'fa fa-check' : 'fa fa-times'}}" color="{{$state.rulsNav == true ? 'green-sea' : 'pomegranate'}}"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </box>
+        </gs>
+        <gs col="x-3">
+        </gs>
+    </gs-row>
+
+</body>
 
 </html>

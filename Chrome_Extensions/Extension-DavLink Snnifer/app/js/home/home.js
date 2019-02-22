@@ -11,10 +11,10 @@ app.controller('davLinkHomeCtrl', function($scope, $rootScope, $timeout) {
 
     $scope.$CONFIG = {
         width: '360',
-        height: '418',
+        height: '240',
         viewTabRest: false,
         viewInit: true,
-        viewJsonRest: false
+        viewJsonDecrypt: false
     };
 
     $scope.$list = {
@@ -46,19 +46,20 @@ app.controller('davLinkHomeCtrl', function($scope, $rootScope, $timeout) {
 
     $scope.$execute = {
         windowRestList: function() {
-            $scope.$CONFIG.viewJsonRest = false;
+            $scope.$CONFIG.viewJsonDecrypt = false;
             $scope.$CONFIG.viewInit = false;
             $scope.$CONFIG.viewTabRest = true;
             $scope.$CONFIG.width = '728';
         },
         windowInit: function() {
-            $scope.$CONFIG.viewJsonRest = false;
+            $scope.$CONFIG.viewJsonDecrypt = false;
             $scope.$CONFIG.viewInit = true;
             $scope.$CONFIG.viewTabRest = false;
             $scope.$CONFIG.width = '360';
+            $scope.$CONFIG.height = '240';
         },
         getRest: function() {
-            chrome.storage.local.get(['restStorage'], function(callBackStorageLocalGet) {
+            chrome.storage.sync.get(['restStorage'], function(callBackStorageLocalGet) {
                 $timeout(function() {
                     if (callBackStorageLocalGet.restStorage != '') {
                         $scope.$list.restList = JSON.parse(callBackStorageLocalGet.restStorage);
@@ -73,14 +74,16 @@ app.controller('davLinkHomeCtrl', function($scope, $rootScope, $timeout) {
             $scope.$state.dataJsonRest = "Copiado!";
 
         },
-        windowJsonRest: function(callBackwindowsJsonRest) {
+        windowJsonRest: function() {
 
+            $scope.$CONFIG.width = '740';
+            $scope.$CONFIG.height = '400';
             $scope.$state.dataJsonRest = "Copiar Json";
             $scope.$temp.dataJsonRest = "";
             $scope.$CONFIG.viewInit = false;
             $scope.$CONFIG.viewTabRest = false;
-            $scope.$temp.dataJsonRest = JSON.stringify(callBackwindowsJsonRest.requestBody, undefined, 2);
-            $scope.$CONFIG.viewJsonRest = true;
+            // $scope.$temp.dataJsonRest = JSON.stringify(callBackwindowsJsonRest.requestBody, undefined, 2);
+            $scope.$CONFIG.viewJsonDecrypt = true;
 
         }
     };
@@ -93,7 +96,8 @@ app.controller('davLinkHomeCtrl', function($scope, $rootScope, $timeout) {
             $scope.$view.restLength = callBackStorageOnChanged.restLength;
         });
     });
-
     $scope.$program.Listener();
+    $scope.$execute.getRest();
+
 
 });
