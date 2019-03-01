@@ -2,7 +2,7 @@
   "name": "DavLink Snnifer Dependencias",
   "version": "1.0",
   "dependencies": {
-    "angular": "^1.7.6",
-    "font-awesome": "^4.7.0"
+    "@fortawesome/fontawesome-free": "^5.7.2",
+    "angular": "^1.7.6"
   }
 }

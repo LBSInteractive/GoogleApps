@@ -1,0 +1,30 @@
+<!-- Modal -->
+<div id="myModal" class="modal" style="display: {{power}} ">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span ng-click="power = 'none'" class="close">&times;</span>
+    <gs-row>
+      <gs>
+        <box>
+          <form>
+              <header>
+                  <h3>Contenido del Servicio</h3>
+              </header>
+              <gs-row>
+                  <gs col="x-8">
+                      <textarea disabled gui="input-control" ng-model="data"></textarea>
+                  </gs>
+              </gs-row>
+              <gs-row>
+                  <gs>
+                      <hr />
+                  </gs>
+              </gs-row>
+          </form>
+      </box>
+      </gs>
+    </gs-row>
+  </div>
+
+</div>

@@ -11,7 +11,7 @@
     <script src="/app/js/panelSniffer/panelSniffer.js"></script>
 
     <!-- FontAwesome -->
-    <link rel="stylesheet" type="text/css" href="/node_modules/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="/node_modules/@fortawesome/fontawesome-free/css/all.css" />
 </head>
 
 <body ng-controller="davLinkPanelSnifferCtrl">
@@ -31,7 +31,8 @@
 
                 <div class="header-user">
 
-                    <button ng-mouseover="$CONFIG.hover.hoverReset = 'hoverReset'" float="right" gui="button"><i style="padding-top: 4.2px;" class="fa fa-power-off" ng-class=""></i> Reiniciar</button>
+                    <button ng-click="$EXECUTE.resetReg()" ng-mouseover="$CONFIG.hover.hoverReset = true" ng-mouseleave="$CONFIG.hover.hoverReset = false" ng-style="{ color: $CONFIG.hover.hoverReset ? '#fc3940' : '','text-shadow':'0 0 black' }" ng-mouseover="$CONFIG.hover.hoverReset = 'hoverReset'"
+                      float="right" gui="button"><i style="padding-top: 4.2px;" class="fa fa-power-off"></i> Reiniciar</button>
 
                 </div>
 
@@ -42,9 +43,74 @@
             </header>
         </gs>
         <gs>
-
+        </gs>
+        <gs>
+            <box>
+                <gs-row>
+                    <gs>
+                        <table gui="table:table-bordered:table-editable:table-narrow" ng-if="$LIST.servicios.length != 0">
+                            <thead>
+                                <tr>
+                                    <th>API</th>
+                                    <th>SERVICIO</th>
+                                    <th>METODO</th>
+                                    <th>Respuesta (HEADER)</th>
+                                    <th>REQUEST</th>
+                                    <th>RESPONSE</th>
+                                    <th>ESTADO</th>
+                                    <th>HORA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="reg in $LIST.servicios">
+                                    <td text-align="center" width="200">{{ reg.api ? (reg.api | uppercase) : '----' }}</td>
+                                    <td text-align="center" width="200">{{ reg.servicio ? (reg.servicio | uppercase) : '----' }}</td>
+                                    <td text-align="center" width="100">{{ reg.metodo ? (reg.metodo | uppercase) : '----' }}</td>
+                                    <td text-align="center" width="300">{{ reg.responseHeader ? (reg.responseHeader | uppercase) : '----' }}</td>
+                                    <td text-align="center" width="100">
+                                        <button gui="button" ng-click="$EXECUTE.dataRestConfig(reg.request)"><i class="fa fa-long-arrow-alt-right" color="peter-river"></i></button>
+                                    </td>
+                                    <td text-align="center" width="100">
+                                        <button gui="button" ng-click="$EXECUTE.dataRestConfig(reg.response)"><i class="fa fa-long-arrow-alt-left" color="peter-river"></i></button>
+                                    </td>
+                                    <td text-align="center" width="100">{{ reg.status ? (reg.status | uppercase) : '----' }}</td>
+                                    <td text-align="center" width="100">{{ reg.time ? reg.time : '----' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table gui="table:table-bordered:table-editable:table-narrow" ng-if="$LIST.servicios.length == 0">
+                            <thead>
+                                <tr>
+                                    <th>API</th>
+                                    <th>SERVICIO</th>
+                                    <th>METODO</th>
+                                    <th>Respuesta (HEADER)</th>
+                                    <th>REQUEST</th>
+                                    <th>RESPONSE</th>
+                                    <th>ESTADO</th>
+                                    <th>HORA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td text-align="center" width="200">----</td>
+                                    <td text-align="center" width="200">----</td>
+                                    <td text-align="center" width="100">----</td>
+                                    <td text-align="center" width="300">----</td>
+                                    <td text-align="center" width="100">----</td>
+                                    <td text-align="center" width="100">----</td>
+                                    <td text-align="center" width="100">----</td>
+                                    <td text-align="center" width="100">----</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </gs>
+                </gs-row>
+            </box>
         </gs>
     </gs-row>
+
+    <gn-modal power="$STATE.modalRest" data="$TEMP.restData"></gn-modal>
 </body>
 
 </html>
