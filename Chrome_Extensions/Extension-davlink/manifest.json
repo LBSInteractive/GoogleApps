@@ -1,8 +1,8 @@
 {
-    "name": "DavLink Sniffer",
-    "version": "1.5",
+    "name": "davlink Sniffer",
+    "version": "1.6",
     "minimum_chrome_version": "10.0",
-    "description": "Beta Test",
+    "description": "devtools version",
     "icons": {
         "16": "app/site_media/logo/NetLink-16.png",
         "32": "app/site_media/logo/NetLink-32.png",
