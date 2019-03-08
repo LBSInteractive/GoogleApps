@@ -1,6 +1,6 @@
 {
-  "name": "DavLink Snnifer Dependencias",
-  "version": "1.0",
+  "name": "DavLinkSnnifer-Dependencias",
+  "version": "1.0.0",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
     "angular": "^1.7.6"

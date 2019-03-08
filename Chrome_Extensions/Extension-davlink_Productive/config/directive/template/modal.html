@@ -1,0 +1,32 @@
+<!-- Modal -->
+<div id="myModal" class="modal" style="display: {{power}} ">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span ng-click="power = 'none';$CONFIG.copy.color = ''" class="close">&times;</span>
+        <gs-row>
+            <gs>
+                <box>
+                    <form>
+                        <header>
+                            <div style="font-size:inherit">
+                                <strong>Contenido del Servicio</strong> &nbsp;&nbsp;<i ng-click="$EXECUTE.copy()" style="color:{{$CONFIG.copy.color}}" class="far fa-copy"></i>
+                            </div>
+                        </header>
+                        <gs-row>
+                            <gs col="x-12">
+                                <pre id="jsonArea" style="height:150px;width: 800px;overflow-y:scroll">{{data | json}}</pre>
+                            </gs>
+                        </gs-row>
+                        <gs-row>
+                            <gs>
+                                <hr />
+                            </gs>
+                        </gs-row>
+                    </form>
+                </box>
+            </gs>
+        </gs-row>
+    </div>
+
+</div>
