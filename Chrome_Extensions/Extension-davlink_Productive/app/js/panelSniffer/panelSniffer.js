@@ -9,14 +9,12 @@ app.directive('gnModal', function() {
         templateUrl: '/config/directive/template/modal.html',
         replace: true,
         scope: {
-            power: '=?',
-            data: '=?'
+            data: '=',
+            ngIf: '=',
+            power: '='
         },
         transclude: false,
         controller: function($scope, $element, $attrs, $transclude) {
-            $scope.$TEMP = {
-                restData: $scope.data
-            };
 
             $scope.$CONFIG = {
                 copy: {
@@ -37,8 +35,17 @@ app.directive('gnModal', function() {
                     textArea.parentNode.removeChild(textArea);
                     copyText = null;
                     textArea = null;
+                },
+                carga:function(){
+                    $scope.$TEMP = {
+                        restData: $scope.data
+                    };
+                    $scope.power = false;
                 }
             };
+
+
+            $scope.$EXECUTE.carga();
         }
     }
 });
@@ -65,8 +72,11 @@ app.controller('davLinkPanelSnifferCtrl', function($scope, $rootScope, $timeout,
     };
 
     $scope.$STATE = {
-        modalRest: 'none'
+        carga: false,
+        popup: false
     };
+
+
 
 
     /* ------------------------------------------------------------------------------------------
@@ -109,7 +119,7 @@ app.controller('davLinkPanelSnifferCtrl', function($scope, $rootScope, $timeout,
 
                         callBackOnRequestFinished.getContent((body) => {
 
-                            if (callBackOnRequestFinished.request) {
+                            if (callBackOnRequestFinished.response) {
                                 response = body;
                             }
 
@@ -190,7 +200,7 @@ app.controller('davLinkPanelSnifferCtrl', function($scope, $rootScope, $timeout,
                                         });
 
                                         var decryptedData = bytes.toString(CryptoJS.enc.Utf8);
-                                        console.log(decryptedData);
+                                        // console.log(decryptedData);
 
                                         data = decryptedData != '' ? decryptedData : '';
                                     }
@@ -202,7 +212,7 @@ app.controller('davLinkPanelSnifferCtrl', function($scope, $rootScope, $timeout,
 
                     callBackOnRequestFinished.getContent((body) => {
 
-                        if (callBackOnRequestFinished.request) {
+                        if (callBackOnRequestFinished.response) {
 
                             var typeJson = true;
                             try {
@@ -211,7 +221,7 @@ app.controller('davLinkPanelSnifferCtrl', function($scope, $rootScope, $timeout,
                                 typeJson = false;
                             } finally {
                                 if (typeJson) {
-                                    response = JSON.parse(data);
+                                    response = JSON.parse(body);
                                 } else {
                                     try {
                                         var datos = CryptoJS.enc.Base64.parse(body),
@@ -307,9 +317,12 @@ app.controller('davLinkPanelSnifferCtrl', function($scope, $rootScope, $timeout,
             $scope.$LIST.servicios = [];
         },
         dataRestConfig: function(sender) {
-            $scope.$STATE.modalRest = 'block';
-            $scope.$TEMP.restData = '';
-            $scope.$TEMP.restData = sender;
+            $scope.$STATE.carga = true;
+            $timeout(function() {
+                $scope.$STATE.popup = true;
+                $scope.$TEMP.restData = '';
+                $scope.$TEMP.restData = sender;
+            }, 500);
         }
     };
 

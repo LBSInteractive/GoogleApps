@@ -1,21 +1,21 @@
 <!-- Modal -->
-<div id="myModal" class="modal" style="display: {{power}} ">
+<div id="myModal" class="modal" style="display:block">
 
     <!-- Modal content -->
     <div class="modal-content">
-        <span ng-click="power = 'none';$CONFIG.copy.color = ''" class="close">&times;</span>
+        <span ng-click="ngIf = false;$CONFIG.copy.color = ''" class="close">&times;</span>
         <gs-row>
             <gs>
                 <box>
                     <form>
                         <header>
-                            <div style="font-size:inherit">
-                                <strong>Contenido del Servicio</strong> &nbsp;&nbsp;<i ng-click="$EXECUTE.copy()" style="color:{{$CONFIG.copy.color}}" class="far fa-copy"></i>
+                            <div ng-click="$EXECUTE.copy()" style="font-size:inherit">
+                                <strong>Contenido del Servicio</strong> &nbsp;&nbsp;<i ng-mouseleave="$STATE.oprimir = false" ng-mouseover="$STATE.oprimir = true" ng-init="count=0" style="color:{{$CONFIG.copy.color}}" class="far fa-copy"></i> <small class="loading" ng-show="$STATE.cargando" style="font-size:11px;">Copiando..</small><small ng-show="$STATE.oprimir && $STATE.cargando == false" style="font-size:11px;">Oprimir para Copiar!</small>
                             </div>
                         </header>
                         <gs-row>
                             <gs col="x-12">
-                                <pre id="jsonArea" style="height:150px;width: 800px;overflow-y:scroll">{{data | json}}</pre>
+                                <pre id="jsonArea" style="height:150px;width: auto;overflow-y:scroll">{{data | json}}</pre>
                             </gs>
                         </gs-row>
                         <gs-row>
