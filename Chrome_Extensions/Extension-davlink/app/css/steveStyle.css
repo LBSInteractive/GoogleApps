@@ -105,3 +105,9 @@ textarea[gui=input-control]{
     }
 
 }
+
+textarea {
+  color:#999 !important;
+  font-weight:400 !important;
+  line-height:2em !important;
+}

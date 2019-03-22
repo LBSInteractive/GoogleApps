@@ -9,13 +9,15 @@
                 <box>
                     <form>
                         <header>
-                            <div style="font-size:inherit">
-                                <strong>Contenido del Servicio</strong> &nbsp;&nbsp;<i ng-click="$EXECUTE.copy()" style="color:{{$CONFIG.copy.color}}" class="far fa-copy"></i>
+                            <div ng-click="$EXECUTE.copy()" style="font-size:inherit">
+                                <strong>Contenido del Servicio</strong> &nbsp;&nbsp;
+                                <i style="color:{{$CONFIG.copy.color}}" ng-mouseleave="$STATE.oprimir = false" class="far fa-copy" ng-click="$EXECUTE.select()"></i>
+                                <small ng-show="$STATE.oprimir && $STATE.cargando == false" style="font-size:11px;">Oprimir para Copiar!</small>
                             </div>
                         </header>
                         <gs-row>
                             <gs col="x-12">
-                                <pre id="jsonArea" style="height:150px;width: auto;overflow-y:scroll">{{data | json}}</pre>
+                                <textarea readonly id="jsonArea" gui="input-control">{{data | json}}</textarea>
                             </gs>
                         </gs-row>
                         <gs-row>

@@ -48,3 +48,66 @@ textarea[gui=input-control]{
     min-height: 200px !important;
     padding: 0px !important;
 }
+
+
+.loading {
+
+    font-size: 30px;
+
+}
+
+
+
+.loading:after {
+
+    content: "...";
+
+    overflow: hidden;
+
+    display: inline-block;
+
+    vertical-align: bottom;
+
+    animation: ellipsis-dot 1s infinite .3s;
+
+    animation-fill-mode: fowards;
+
+    width: 1.25em;
+
+}
+
+
+
+@keyframes ellipsis-dot {
+
+    25% {
+
+    content: "";
+
+    }
+
+    50% {
+
+    content: ".";
+
+    }
+
+    75% {
+
+    content: "..";
+
+    }
+
+    100% {
+
+    content: "...";
+
+    }
+
+}
+
+textarea {
+  color:#999 !important;
+  font-weight:400 !important;
+  line-height:2em !important;
+}
