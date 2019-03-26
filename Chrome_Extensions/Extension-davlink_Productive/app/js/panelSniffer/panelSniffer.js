@@ -27,30 +27,7 @@ app.directive('gnModal', function() {
             };
 
             $scope.$EXECUTE = {
-                // copy: function() {
-                //     $scope.$STATE.oprimir = true;
-                //     $scope.$STATE.cargando = true;
-                //     let copyText = '';
-                //     let textArea = '';
-                //     (async function() {
-                //         await (function() {
-                //             let copyText = document.getElementById("jsonArea").textContent;
-                //             let textArea = document.createElement('textarea');
-                //             $scope.$CONFIG.copy.color = 'rgb(106, 230, 152)';
-                //             // textArea.setAttribute("", "hidden");
-                //             textArea.textContent = copyText;
-                //             document.body.append(textArea);
-                //             textArea.select();
-                //             document.execCommand("copy");
-                //             textArea.parentNode.removeChild(textArea);
-                //             copyText = null;
-                //             textArea = null;
-                //         }())
-                //         $scope.$STATE.cargando = false;
-                //         $scope.$apply();
-                //     }());
-                // },
-                select: function(){
+                select: function() {
                     $scope.$STATE.oprimir = true;
                     let copyText = document.querySelector("#jsonArea");
                     copyText.select();
@@ -300,6 +277,7 @@ app.controller('davLinkPanelSnifferCtrl', function($scope, $rootScope, $timeout,
                     });
 
                 } else if (callBackOnRequestFinished.request.url.includes("actualizaSiebel")) {
+
                     let api = '',
                         servicio = '',
                         metodo = '',
@@ -387,6 +365,95 @@ app.controller('davLinkPanelSnifferCtrl', function($scope, $rootScope, $timeout,
                         }, 0);
                     });
 
+                } else if (callBackOnRequestFinished.request.url.includes("ReportesPDF-api")) {
+
+                    let api = '',
+                        servicio = '',
+                        metodo = '',
+                        responseHeader = '',
+                        request = {},
+                        response = {},
+                        status = '',
+                        time = '';
+
+                    time = $filter('date')(callBackOnRequestFinished.startedDateTime, 'short');
+
+                    api = callBackOnRequestFinished.request.url.split("/ReportesPDF-api/")[1] && callBackOnRequestFinished.request.url.split("/ReportesPDF-api/")[1].split("/")[0] ? callBackOnRequestFinished.request.url.split("/ReportesPDF-api/")[1].split("/")[0] : '';
+
+                    servicio = callBackOnRequestFinished.request.url.split("/ReportesPDF-api/")[1] && callBackOnRequestFinished.request.url.split("/ReportesPDF-api/")[1].split("/")[0] ? callBackOnRequestFinished.request.url.split("/ReportesPDF-api/")[1].split("/")[1] : '';
+
+                    metodo = callBackOnRequestFinished.request.method || '';
+
+                    status = callBackOnRequestFinished.response.status || '';
+
+                    responseHeader = $filter('filter')(callBackOnRequestFinished.response.headers, {
+                        name: "Respuesta"
+                    }).length != 0 ? ($filter('filter')(callBackOnRequestFinished.response.headers, {
+                        name: "Respuesta"
+                    })[0].value) : "";
+
+                    request = callBackOnRequestFinished.request.postData && callBackOnRequestFinished.request.postData.text ? (function() {
+                        var toJson = null;
+                        toJson = '';
+                        try {
+                            toJson = JSON.parse(callBackOnRequestFinished.request.postData.text);
+                        } catch (e) {
+                            try {
+                                let preDatos = CryptoJS.enc.Base64.parse(callBackOnRequestFinished.request.postData.text),
+                                    datos = preDatos.toString(CryptoJS.enc.Utf8).split("::");
+                                if (datos != null && datos[0] && datos[1] && datos[2]) {
+                                    let bytes = CryptoJS.AES.decrypt(datos[0], CryptoJS.enc.Base64.parse(datos[1]), {
+                                        mode: CryptoJS.mode.CBC,
+                                        padding: CryptoJS.pad.Pkcs7,
+                                        iv: CryptoJS.enc.Base64.parse(datos[2])
+                                    });
+                                    let decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+                                    toJson = decryptedData != '' ? JSON.parse(decryptedData) : '';
+                                }
+                            } catch (e) {
+                                toJson = callBackOnRequestFinished.request.postData.text;
+                            }
+                        }
+                        return toJson;
+
+                    }()) : '';
+
+                    callBackOnRequestFinished.getContent((body) => {
+                        if (callBackOnRequestFinished.response) {
+                            try {
+                                response = JSON.parse(body);
+                            } catch (err) {
+                                try {
+                                    let preDatos = CryptoJS.enc.Base64.parse(body),
+                                        datos = preDatos.toString(CryptoJS.enc.Utf8).split("::");
+                                    if (datos != null && datos[0] && datos[1] && datos[2]) {
+                                        let bytes = CryptoJS.AES.decrypt(datos[0], CryptoJS.enc.Base64.parse(datos[1]), {
+                                            mode: CryptoJS.mode.CBC,
+                                            padding: CryptoJS.pad.Pkcs7,
+                                            iv: CryptoJS.enc.Base64.parse(datos[2])
+                                        });
+                                        let decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+                                        response = decryptedData != '' ? JSON.parse(decryptedData) : '';
+                                    }
+                                } catch (e) {
+                                    response = body;
+                                }
+                            }
+                        }
+
+                        $timeout(function() {
+                            $scope.$LIST.servicios.push({
+                                status: status,
+                                metodo: metodo,
+                                responseHeader: responseHeader,
+                                api: api,
+                                servicio: servicio,
+                                request: request,
+                                response: response,
+                                time: time
+                            });
+                        }, 0);
+                    });
                 }
             } else {
                 console.log('/** Error en URL del servicio **/');
