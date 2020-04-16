@@ -1,0 +1,34 @@
+<!-- Modal -->
+<div id="myModal" class="modal" style="display:block">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span ng-click="ngIf = false;$CONFIG.copy.color = ''" class="close">&times;</span>
+        <gs-row>
+            <gs>
+                <box>
+                    <form>
+                        <header>
+                            <div ng-click="$EXECUTE.copy()" style="font-size:inherit">
+                                <strong>Contenido del Servicio</strong> &nbsp;&nbsp;
+                                <i style="color:{{$CONFIG.copy.color}}" ng-mouseleave="$STATE.oprimir = false" class="far fa-copy" ng-click="$EXECUTE.select()"></i>
+                                <small ng-show="$STATE.oprimir && $STATE.cargando == false" style="font-size:11px;">Oprimir para Copiar!</small>
+                            </div>
+                        </header>
+                        <gs-row>
+                            <gs col="x-12">
+                                <textarea readonly id="jsonArea" gui="input-control">{{data | json}}</textarea>
+                            </gs>
+                        </gs-row>
+                        <gs-row>
+                            <gs>
+                                <hr />
+                            </gs>
+                        </gs-row>
+                    </form>
+                </box>
+            </gs>
+        </gs-row>
+    </div>
+
+</div>

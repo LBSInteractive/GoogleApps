@@ -1,0 +1,27 @@
+{
+    "name": "davlink Sniffer",
+    "version": "4.0.0",
+    "minimum_chrome_version": "10.0",
+    "description": "devtools version",
+    "icons": {
+        "16": "app/site_media/logo/NetLink-16.png",
+        "32": "app/site_media/logo/NetLink-32.png",
+        "48": "app/site_media/logo/NetLink-48.png",
+        "128": "app/site_media/logo/NetLink-128.png"
+    },
+    "permissions": ["declarativeContent", "activeTab","*://168.170.2.25/*", "*://168.170.1.218/*", "*://168.170.2.225/*", "*://webappletdes.davivienda.loc/*", "*://webappletslab.davivienda.loc/*", "*://localhost/*"],
+    "background": {
+        "page": "config/background/background.html",
+        "persistent": true
+    },
+    "page_action": {
+        "default_icon": {
+            "16": "app/site_media/logo/NetLink-16.png",
+            "32": "app/site_media/logo/NetLink-32.png",
+            "48": "app/site_media/logo/NetLink-48.png",
+            "128": "app/site_media/logo/NetLink-128.png"
+        }
+    },
+    "devtools_page": "config/devTools/devtools.html",
+    "manifest_version": 2
+}
